@@ -1,0 +1,122 @@
+
+
+
+BFLAGS="-nostdlib -nostdinc -mno-implicit-float -Wno-frame-address -ffreestanding -fno-builtin -fno-omit-frame-pointer -g -gdwarf-2 -ggdb -mcmodel=small -mno-red-zone -O0 -static -Wall -Wno-missing-braces -Wno-parentheses -Wno-unknown-pragmas"
+#CFLAGS="-c -I./include -I /home/rafael/apex/include -I /home/rafael/apex/amd64/include -I$HARVEY/sys/include -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -D__PLAN9__ -D_PLAN9_SOURCE -D_HARVEY_SOURCE -D SDL_VIDEO_DRIVER_PLAN9"
+CFLAGS="-c -I./include -I /home/rafael/apex/include -I /home/rafael/apex/amd64/include -I$HARVEY/sys/include -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -D__PLAN9__ -D_PLAN9_SOURCE -D_HARVEY_SOURCE"
+
+file=(
+	"src/SDL."
+	"src/SDL_error."
+	"src/SDL_fatal."
+	"src/audio/SDL_audio."
+	"src/audio/SDL_audiocvt."
+    "src/audio/SDL_audiodev."
+    "src/audio/SDL_mixer."
+    "src/audio/SDL_mixer_MMX."
+    "src/audio/SDL_mixer_m68k."
+    "src/audio/SDL_wave."
+	"src/cdrom/SDL_cdrom."
+	"src/cpuinfo/SDL_cpuinfo."
+	"src/events/SDL_active."
+    "src/events/SDL_events."
+    "src/events/SDL_expose."
+    "src/events/SDL_keyboard."
+    "src/events/SDL_mouse."
+    "src/events/SDL_quit."
+    "src/events/SDL_resize."
+	"src/file/SDL_rwops."
+	"src/joystick/SDL_joystick."
+	"src/stdlib/SDL_getenv."
+    "src/stdlib/SDL_iconv."
+    "src/stdlib/SDL_malloc."
+    "src/stdlib/SDL_qsort."
+    "src/stdlib/SDL_stdlib."
+    "src/stdlib/SDL_string."
+	"src/thread/SDL_thread."
+	"src/timer/SDL_timer."
+	"src/video/SDL_RLEaccel."
+    "src/video/SDL_blit."
+    "src/video/SDL_blit_0."
+    "src/video/SDL_blit_1."
+    "src/video/SDL_blit_A."
+    "src/video/SDL_blit_N."
+    "src/video/SDL_bmp."
+    "src/video/SDL_cursor."
+    "src/video/SDL_gamma."
+    "src/video/SDL_pixels."
+    "src/video/SDL_stretch."
+    "src/video/SDL_surface."
+    "src/video/SDL_video."
+    "src/video/SDL_yuv."
+    "src/video/SDL_yuv_mmx."
+    "src/video/SDL_yuv_sw."
+	"src/audio/dummy/SDL_dummyaudio."
+	"src/audio/plan9/SDL_plan9audio."
+	"src/cdrom/dummy/SDL_syscdrom."
+	"src/joystick/dummy/SDL_sysjoystick."
+	"src/loadso/dummy/SDL_sysloadso."
+	"src/thread/generic/SDL_syscond."
+    "src/thread/generic/SDL_sysmutex."
+    "src/thread/generic/SDL_syssem."
+    "src/thread/generic/SDL_systhread."
+	"src/timer/dummy/SDL_systimer."
+	"src/video/dummy/SDL_nullevents."
+    "src/video/dummy/SDL_nullmouse."
+    "src/video/dummy/SDL_nullvideo."
+	"src/video/plan9/SDL_plan9events."
+    "src/video/plan9/SDL_plan9mouse."
+    "src/video/plan9/SDL_plan9video."
+	"src/timer/SDL_timer."
+	"src/timer/plan9/SDL_systimer."
+  	)
+
+rm -rf *.o libsdl.a
+
+I=0
+while [ -n "${file[I]}" ]
+do
+	echo gcc $BFLAGS $CFLAGS "${file[I]}"c
+	clang $BFLAGS $CFLAGS "${file[I]}"c
+	if [ $? -ne 0 ]
+	then
+		echo ""
+		echo "++++ ERROR ++++"
+		echo ""
+		exit 1
+	fi
+	I=$(( $I + 1 ))
+done
+
+I=0
+LISTA=
+while [ -n "${file[I]}" ]
+do
+	LISTA="$LISTA `basename ${file[I]}`o"
+	I=$(( $I + 1 ))
+done
+
+echo /usr/bin/ar -rs libsdl.a $LISTA
+/usr/bin/ar -rs libsdl.a $LISTA
+if [ $? -ne 0 ]
+then
+	echo ""
+        echo "++++ ERROR ++++"
+        echo ""
+        exit 1
+fi
+echo /usr/bin/ranlib libsdl.a
+/usr/bin/ranlib libsdl.a
+if [ $? -ne 0 ]
+then
+        echo ""
+        echo "++++ ERROR ++++"
+        echo ""
+        exit 1
+fi
+
+rm -rf *.o
+
+echo ""
+echo "++ ALL OK ++"
+echo ""

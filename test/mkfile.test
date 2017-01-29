@@ -1,0 +1,48 @@
+APE=/sys/src/ape
+<$APE/config
+
+TARG=\
+	checkkeys\
+	graywin\
+	loopwave\
+	testalpha\
+	testbitmap\
+	testblitspeed\
+	testcdrom\
+	testdyngl\
+	testerror\
+	testfile\
+	testgamma\
+	testgl\
+	testhread\
+	testiconv\
+#	testjoystick\
+	testkeys\
+	testlock\
+	testoverlay\
+	testoverlay2\
+	testpalette\
+	testplatform\
+	testsem\
+	testsprite\
+	testtimer\
+	testver\
+	testvidinfo\
+	testwin\
+	testwm\
+	threadwin\
+	torturethread\
+
+OFILES=../libSDL.a
+
+BIN=$APEBIN
+</sys/src/cmd/mkmany
+
+CFLAGS=-c -I../include -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE
+
+test:V:
+	mk all
+	for(i in $TARG){
+		echo ____ testing $i ____
+		$O.$i || echo $O.$i: failed
+	}

@@ -1,0 +1,40 @@
+Experimental Port of SDL 1.2.x to Plan 9 from Bell Labs
+
+Builds and most simple apps run without too many problems.
+
+For comments and fixes, email uriel@cat-v.org
+
+BUGS
+- Should handle arbitrary color depths
+- Should set fixed window size on startup.
+- Some file tests fail (why?)
+
+IN PROGRESS
+- Timer
+- Audio
+
+TODO
+- Overlays
+- Cursors
+
+FUTURE
+- A way to detect key-down key-up, requires new kernel interface(?!)
+- OpenGL (using f2f's mesa port?)
+- Cdrom
+- Some kind of thread support(would need to add libthread to APE...)
+
+CREDITS
+- fgb: created the original mkfiles and config.h
+- 20h: started to write the video driver, audio driver and threads
+- uriel: all the bugs
+
+CHANGELOG
+
+0.2 - 2006/07/28
+* Implement native cursor, this fixes various bugs, including garbage
+	around the cursor and slow performance when moving cursor.
+* Add native audio and timer to build process by default.
+* Small improvements to event and video.
+
+0.1 - 2006/07/24
+* First release.

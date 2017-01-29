@@ -1,0 +1,3 @@
+mkfile	SDL-1.2.10/mkfile
+mkfile.test SDL-1.2.10/test/mkfile
+SDL_config.h	SDL-1.2.10/include/SDL_config.h
