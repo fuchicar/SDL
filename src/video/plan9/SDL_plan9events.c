@@ -48,7 +48,7 @@ void P9_PumpEvents(_THIS)
 	SDL_keysym sym;
 	Event ev;
 	Point mpt;
-	int i, e, mb, omb;
+	int e, mb, omb;
 
 	if(ecanread(Emouse|Ekeyboard)) { 
 		e = event(&ev);

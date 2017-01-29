@@ -1,9 +1,9 @@
 
 
 
-BFLAGS="-nostdlib -nostdinc -mno-implicit-float -Wno-frame-address -ffreestanding -fno-builtin -fno-omit-frame-pointer -g -gdwarf-2 -ggdb -mcmodel=small -mno-red-zone -O0 -static -Wall -Wno-missing-braces -Wno-parentheses -Wno-unknown-pragmas"
-#CFLAGS="-c -I./include -I /home/rafael/apex/include -I /home/rafael/apex/amd64/include -I$HARVEY/sys/include -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -D__PLAN9__ -D_PLAN9_SOURCE -D_HARVEY_SOURCE -D SDL_VIDEO_DRIVER_PLAN9"
-CFLAGS="-c -I./include -I /home/rafael/apex/include -I /home/rafael/apex/amd64/include -I$HARVEY/sys/include -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -D__PLAN9__ -D_PLAN9_SOURCE -D_HARVEY_SOURCE"
+BFLAGS="-nostdlib -nostdinc -mno-implicit-float -ffreestanding -fno-builtin -fno-omit-frame-pointer -g -gdwarf-2 -ggdb -mno-red-zone -O0 -static -Wall -Wno-missing-braces -Wno-parentheses -Wno-unknown-pragmas"
+#CFLAGS="-c -I./include -I $APEX/include -I $APEX/amd64/include -I$HARVEY/sys/include -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -D__PLAN9__ -D_PLAN9_SOURCE -D_HARVEY_SOURCE -D SDL_VIDEO_DRIVER_PLAN9"
+CFLAGS="-c -I./include -I $APEX/include -I $APEX/amd64/include -I$HARVEY/sys/include -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -D__PLAN9__ -D_PLAN9_SOURCE -D_HARVEY_SOURCE -D_LIMITS_EXTENSION -D_BSD_SOURCE -DHAVE_SOCK_OPTS -D_PLAN9_SOURCE -DHARVEY"
 
 file=(
 	"src/SDL."
@@ -73,11 +73,17 @@ file=(
 
 rm -rf *.o libsdl.a
 
+if [ -z "$CC" ]; then
+    CC="clang"
+fi
+if [ "$CC" = "clang" ]; then
+    $BFLAGS = "$BFLAGS -Wno-frame-address"
+fi
 I=0
 while [ -n "${file[I]}" ]
 do
-	echo gcc $BFLAGS $CFLAGS "${file[I]}"c
-	clang $BFLAGS $CFLAGS "${file[I]}"c
+	echo $CC $BFLAGS $CFLAGS "${file[I]}"c
+	$CC $BFLAGS $CFLAGS "${file[I]}"c
 	if [ $? -ne 0 ]
 	then
 		echo ""
@@ -96,8 +102,8 @@ do
 	I=$(( $I + 1 ))
 done
 
-echo /usr/bin/ar -rs libsdl.a $LISTA
-/usr/bin/ar -rs libsdl.a $LISTA
+echo ar -rs libsdl.a $LISTA
+ar -rs libsdl.a $LISTA
 if [ $? -ne 0 ]
 then
 	echo ""
@@ -105,8 +111,8 @@ then
         echo ""
         exit 1
 fi
-echo /usr/bin/ranlib libsdl.a
-/usr/bin/ranlib libsdl.a
+echo ranlib libsdl.a
+ranlib libsdl.a
 if [ $? -ne 0 ]
 then
         echo ""
