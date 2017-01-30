@@ -23,6 +23,7 @@
 #ifndef _SDL_config_plan9_h
 #define _SDL_config_plan9_h
 #include <stdarg.h>
+#include <strings.h>
 
 typedef signed char int8_t;
 typedef unsigned char uint8_t;
@@ -84,7 +85,6 @@ typedef unsigned int uint32_t;
 #define HAVE_STRCHR 1
 #define HAVE_STRCMP 1
 #define HAVE_STRDUP 1
-#define HAVE_STRING_H 1
 #define HAVE_STRING_H 1
 #define HAVE_STRLEN 1
 #define HAVE_STRNCASECMP 1

@@ -125,7 +125,8 @@ static VideoBootStrap *bootstrap[] = {
 #endif
 #if SDL_VIDEO_DRIVER_PLAN9
 	&PLAN9_bootstrap,
-#endif	NULL
+#endif
+NULL
 };
 
 SDL_VideoDevice *current_video = NULL;

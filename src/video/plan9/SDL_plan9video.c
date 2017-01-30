@@ -43,7 +43,7 @@ static void P9_VideoQuit(_THIS);
 static int P9_SetColors(_THIS, int firstcolor, int ncolors, SDL_Color *colors);
 static int P9_AllocHWSurface(_THIS, SDL_Surface *surface);
 static int P9_LockHWSurface(_THIS, SDL_Surface *surface);
-static int P9_FlipHWSurface(_THIS, SDL_Surface *surface);
+//static int P9_FlipHWSurface(_THIS, SDL_Surface *surface);
 static void P9_UnlockHWSurface(_THIS, SDL_Surface *surface);
 static void P9_FreeHWSurface(_THIS, SDL_Surface *surface);
 
@@ -56,8 +56,8 @@ void
 eresized(int new)
 {
 
-	SDL_VideoDevice *this = local_this;
-	
+	//SDL_VideoDevice *this = local_this;
+
 	if(new && getwindow(display, Refnone) < 0)
 		exit(1); // sysfatal("can't reattach to window");
 
@@ -75,7 +75,7 @@ eresized(int new)
 
 static int P9_Available(void)
 {
-	printf("Available!!\n");
+	write(1, "boo", 4);
 	return 1;
 }
 
@@ -93,13 +93,13 @@ static SDL_VideoDevice *P9_CreateDevice(int devindex)
 	if(device) {
 		SDL_memset(device, 0, (sizeof *device));
 		device->hidden = (struct SDL_PrivateVideoData *)
-				SDL_malloc((sizeof *device->hidden));
+				malloc((sizeof *device->hidden));
 	}
 
 	if((device == NULL) || (device->hidden == NULL)) {
 		SDL_OutOfMemory();
 		if(device)
-			SDL_free(device);
+			free(device);
 		return 0;
 	}
 	SDL_memset(device->hidden, 0, (sizeof *device->hidden));
@@ -199,7 +199,7 @@ static void P9_DirectUpdate(_THIS, int numrects, SDL_Rect *rects);
 SDL_Surface *P9_SetVideoMode(_THIS, SDL_Surface *current,
 				int width, int height, int bpp, Uint32 flags)
 {
-	int mode;
+	//int mode;
 
 	if(P9_buffer)
 		SDL_free(P9_buffer);
@@ -251,7 +251,7 @@ static void P9_UnlockHWSurface(_THIS, SDL_Surface *surface)
 }
 
 /* NOT USED */
-static int P9_FlipHWSurface(_THIS, SDL_Surface *surface)
+/*static int P9_FlipHWSurface(_THIS, SDL_Surface *surface)
 {
 	draw(screen, screen->r, backbuf, nil, ZP);
 	SDL_mutexP(P9_mutex);
@@ -259,7 +259,7 @@ static int P9_FlipHWSurface(_THIS, SDL_Surface *surface)
 	SDL_mutexV(P9_mutex);
 
 	return 0;
-}
+}*/
 
 static void P9_DirectUpdate(_THIS, int numrects, SDL_Rect *rects)
 {
